@@ -31,3 +31,11 @@ gateway:
   gemini:
     upstream-base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com}
     upstream-api-key: ${GEMINI_API_KEY:}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
