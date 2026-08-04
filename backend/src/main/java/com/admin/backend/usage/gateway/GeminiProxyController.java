@@ -4,6 +4,7 @@ import com.admin.backend.common.domain.ApiKey;
 import com.admin.backend.common.domain.User;
 import com.admin.backend.common.enumeration.AiProvider;
 import com.admin.backend.common.repository.ApiKeyRepository;
+import com.admin.backend.usage.payload.BudgetStatusResponse;
 import com.admin.backend.usage.service.AIUsageService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -74,6 +75,14 @@ public class GeminiProxyController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         User user = apiKey.get().getUser();
+
+        // Pre-flight Budget Guard
+        BudgetStatusResponse budgetStatus = aiUsageService.getBudgetStatus(user.getTeam().getId());
+        if (budgetStatus.isOverBudget()) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .header("X-Budget-Exceeded", "true")
+                    .build();
+        }
         String model = modelAndAction.contains(":") ? modelAndAction.split(":")[0] : modelAndAction;
 
         HttpRequest upstreamRequest = HttpRequest.newBuilder()

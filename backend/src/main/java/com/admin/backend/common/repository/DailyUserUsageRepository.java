@@ -43,4 +43,13 @@ public interface DailyUserUsageRepository extends JpaRepository<DailyUserUsage, 
                                        @Param("from") LocalDate from,
                                        @Param("to") LocalDate to);
 
+    @Query("SELECT SUM(u.totalSpendUsd) FROM DailyUserUsage u")
+    Double sumAllSpend();
+
+    @Query("SELECT SUM(u.promptTokens) FROM DailyUserUsage u")
+    Long sumAllPromptTokens();
+
+    @Query("SELECT SUM(u.completionTokens) FROM DailyUserUsage u")
+    Long sumAllCompletionTokens();
+
 }

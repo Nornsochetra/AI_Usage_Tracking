@@ -20,4 +20,6 @@ public interface ApiKeyRepository extends JpaRepository<ApiKey, String> {
         """)
     Optional<ApiKey> findByKeyValueAndProvider(@Param("keyValue") String keyValue,
                                                 @Param("provider") AiProvider provider);
+
+    boolean existsByUserIdAndProvider(String userId, AiProvider provider);
 }
